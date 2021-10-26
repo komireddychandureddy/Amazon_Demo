@@ -8,8 +8,8 @@
 	
 	<test name="Smoke">
     <classes>
-      <class name="com.smoke.tests.Login"/>  
-      <class name="com.smoke.tests.SignUp"/>
+      <class name="com.smoke.tests.SearchItemTest"/>  
+      <class name="com.smoke.tests.SignUpTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

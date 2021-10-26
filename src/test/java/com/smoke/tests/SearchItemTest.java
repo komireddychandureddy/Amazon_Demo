@@ -16,7 +16,7 @@ import listeners.CustomListener;
 import utils.ConfigReader;
 import utils.ExcelTestDataReader;
 @Listeners(CustomListener.class)
-public class SearchItem extends BaseMethod
+public class SearchItemTest extends BaseMethod
 {	
 
 	@Test(dataProvider="getExcelTestData",description ="Verify searching an item")
