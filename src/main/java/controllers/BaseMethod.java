@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,22 +35,17 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-
 import com.asprise.util.pdf.PDFReader;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
@@ -58,13 +54,12 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import utils.ConfigReader;
-import utils.EnvironmentSetup;
 import utils.ExtentTestManager;
 import utils.LogUtil;
 
 /**
  * @Author Chandu
- * @Date 15-Nov-2018
+ * @Date 26-Jul-2024
  */
 public class BaseMethod extends WebDriverFactory
 {
@@ -655,9 +650,9 @@ public class BaseMethod extends WebDriverFactory
 		}
 
 		public WebElement waitForClickable(By locator) {
-			WebDriverWait wait = new WebDriverWait(getWebDriver(), DEFAULT_WAIT_SECONDS);
-			wait.ignoring(ElementNotVisibleException.class);
-			wait.ignoring(WebDriverException.class);
+			WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(DEFAULT_WAIT_SECONDS));
+			//wait.ignoring(ElementNotVisibleException.class);
+			//wait.ignoring(WebDriverException.class);
 
 			return wait.until(ExpectedConditions.elementToBeClickable(locator));
 		}
@@ -667,8 +662,8 @@ public class BaseMethod extends WebDriverFactory
 		 * @return
 		 */
 		public WebElement waitForPresent(By locator) {
-			WebDriverWait wait = new WebDriverWait(getWebDriver(), DEFAULT_WAIT_SECONDS);
-			wait.ignoring(ElementNotVisibleException.class);
+			WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(DEFAULT_WAIT_SECONDS));
+			//wait.ignoring(ElementNotVisibleException.class);
 			return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 		}
 
@@ -677,8 +672,8 @@ public class BaseMethod extends WebDriverFactory
 		 * @return
 		 */
 		public WebElement waitForVisible(By locator) {
-			WebDriverWait wait = new WebDriverWait(getWebDriver(), DEFAULT_WAIT_SECONDS);
-			wait.ignoring(ElementNotVisibleException.class);
+			WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(DEFAULT_WAIT_SECONDS));
+			//wait.ignoring(ElementNotVisibleException.class);
 			return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 		}
 		
@@ -687,8 +682,8 @@ public class BaseMethod extends WebDriverFactory
 		 * @return
 		 */
 		public WebElement waitForVisible(WebElement element) {
-			WebDriverWait wait = new WebDriverWait(getWebDriver(), DEFAULT_WAIT_SECONDS);
-			wait.ignoring(ElementNotVisibleException.class);
+			WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(DEFAULT_WAIT_SECONDS));
+			//wait.ignoring(ElementNotVisibleException.class);
 			return wait.until(ExpectedConditions.visibilityOf(element));
 		}
 

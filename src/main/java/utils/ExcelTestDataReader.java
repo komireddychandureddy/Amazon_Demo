@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
@@ -19,10 +19,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelTestDataReader {
 	public LinkedList<Object[]> getRowDataMap(String inputFile, String sheetName) {
 		int count = 0;
-		Sheet sheet = null;
+		//Sheet sheet = null;
+		XSSFSheet sheet =null;
 		Map<String, String> rowdatamap = null;
 		FileInputStream fis = null;
-		Workbook workbook = null;
+		//Workbook workbook = null;
+		XSSFWorkbook workbook = null;
 		final LinkedList<Object[]> dataBeans = new LinkedList<Object[]>();
 
 		// Creating index map
@@ -31,11 +33,12 @@ public class ExcelTestDataReader {
 		try {
 			fis = new FileInputStream(inputFile);
 			workbook = new XSSFWorkbook(fis);
+			//workbook.g
 			sheet = workbook.getSheet(sheetName);
-			workbook.close();
+			//workbook.close();
 
 			// mapping column index with column name.
-			Row firstRow = sheet.getRow(0);
+			XSSFRow firstRow = sheet.getRow(0);
 			for (Cell cell : firstRow) {
 				index.put(cell.getStringCellValue(), count);
 				count++;
@@ -47,7 +50,7 @@ public class ExcelTestDataReader {
 			for (int iCounter = 1; iCounter <= rowCount; iCounter++) {
 				//initialize excel row map
 				rowdatamap = new HashMap<String, String>();
-				Row rowData = sheet.getRow(iCounter);
+				XSSFRow rowData = sheet.getRow(iCounter);
 				for (String key : index.keySet()) {
 					int columnnum = (Integer) index.get(key);
 					if(rowData.getCell(columnnum)==null){

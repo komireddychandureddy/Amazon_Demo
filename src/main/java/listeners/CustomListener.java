@@ -49,7 +49,7 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
     	
     	LogUtil.infoLog(getClass(), iTestContext.getName());
         //System.out.println("I am in onStart method " + iTestContext.getName());
-        iTestContext.setAttribute("WebDriver", this.getWebDriver());
+ //       iTestContext.setAttribute("WebDriver", this.getWebDriver());
         
         if(ConfigReader.getValue("JiraManagementTool").equalsIgnoreCase("Y")){
 			//Jira Test management config
