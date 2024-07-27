@@ -8,6 +8,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.Media;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
 import utils.ConfigReader;
 import utils.LogUtil;
 
@@ -18,7 +24,12 @@ import utils.LogUtil;
 public class WebDriverFactory extends BrowserFactory
 {
 	public static ThreadLocal<WebDriver> wd = new ThreadLocal<WebDriver>();
+	//public static ThreadLocal<ExtentTest>  extent_test = new ThreadLocal<ExtentTest>();
 
+	/*
+	 * protected ExtentReports extent; ExtentTest test; ExtentSparkReporter spark;
+	 */
+   
 	/*@Parameters({ "browser" , "url" })
 	@BeforeMethod
 	public void beforeMethod(String browser, String url) throws Exception
@@ -41,6 +52,8 @@ public class WebDriverFactory extends BrowserFactory
 			new WebDriverFactory();
 			WebDriver driver = WebDriverFactory.createDriver(Browser,WebsiteURL);
 			setWebDriver(driver);
+			
+			
 		}
 
 	public void setWebDriver(WebDriver driver) 
@@ -64,5 +77,6 @@ public class WebDriverFactory extends BrowserFactory
 		//getWebDriver().close();	
 	}
 
-
+	
+ 
 }

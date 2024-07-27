@@ -54,7 +54,6 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import utils.ConfigReader;
-import utils.ExtentTestManager;
 import utils.LogUtil;
 
 /**
@@ -65,7 +64,7 @@ public class BaseMethod extends WebDriverFactory
 {
 	private String RESULT_FOLDER_NAME = USERDIR + "\\ExecutionReports\\ExecutionReports";
 	
-	
+	//ExtentManager extentma= new ExtentManger();
 	/*@AfterTest
 	public void beforeSuite() throws Exception
 	{
@@ -83,19 +82,19 @@ public class BaseMethod extends WebDriverFactory
 
 	public void logStep(String logStep) {
 		LogUtil.infoLog(this.getClass(), logStep);
-		ExtentTestManager.stepInfo(logStep);
+		stepInfo(logStep);
 	}
 	
 		
 	public void logStepFail(String logStep) {
 				   
 		LogUtil.infoLog(this.getClass(), "Failed :"+logStep);
-		ExtentTestManager.stepFail(logStep);
+		stepFail(logStep);
 	}
 	
 	public void logStepPass(String logStep) {
 		LogUtil.infoLog(this.getClass(),"Passed: "+ logStep);
-		ExtentTestManager.stepPass(logStep);
+		stepPass(logStep);
 	}
 	
 	/* To Press ENTER Key using Robot */

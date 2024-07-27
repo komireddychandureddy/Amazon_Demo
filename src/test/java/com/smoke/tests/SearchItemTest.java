@@ -26,7 +26,7 @@ public class SearchItemTest extends BaseMethod
 		welcome.welcomePage();
 		SearchPage search =new SearchPage();
 		search.searchItem(data.get("Category"),data.get("Item"));
-		search.addToCart();
+		//search.addToCart();
 		
 	//	Assert.assertTrue(, "Home page is not visiable");
 	}

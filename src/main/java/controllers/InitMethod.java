@@ -15,13 +15,14 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.ITestResult;
 import org.testng.asserts.SoftAssert;
 
+import utils.ExtentManager;
 import utils.JiraUtil;
 
 /**
  * @Author Chandu
  * @Date 15-Nov-2018
  */
-public class InitMethod 
+public class InitMethod extends ExtentManager
 {
 	public static String WebsiteURL;
 	public static String Browser;

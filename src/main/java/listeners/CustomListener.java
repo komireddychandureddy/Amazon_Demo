@@ -2,14 +2,11 @@ package listeners;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-
 import javax.mail.MessagingException;
 
 import org.codehaus.plexus.util.ExceptionUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ISuite;
@@ -17,18 +14,12 @@ import org.testng.ISuiteListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.testng.annotations.Test;
-
-import com.relevantcodes.extentreports.LogStatus;
-
-import controllers.BaseMethod;
 import controllers.InitMethod;
 import utils.JiraUtil;
 import utils.LogUtil;
 import utils.SendMail;
 import utils.ConfigReader;
 import utils.ExtentManager;
-import utils.ExtentTestManager;
 
 
 /**
@@ -39,6 +30,7 @@ import utils.ExtentTestManager;
 public class CustomListener extends SendMail implements ITestListener, ISuiteListener, IInvokedMethodListener 
 {
 
+	ExtentManager report;
 	
 	private String getTestMethodName(ITestResult iTestResult) {
         return iTestResult.getMethod().getConstructorOrMethod().getName();
@@ -71,14 +63,17 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
 			InitMethod.jiraapi = new JiraUtil();
 		}
 		
+		//report = new ExtentManager();
+		extent= ExtentManager.getReporter();
+		
     }
 
     @Override
     public void onFinish(ITestContext iTestContext) {
         System.out.println("I am in onFinish method " + iTestContext.getName());
         //Do tier down operations for extentreports reporting!
-        ExtentTestManager.endTest();
-        ExtentManager.getReporter().flush();
+        endTest();
+        //report.getReporter().flush();
         if(!(getWebDriver()==null)){
         	getWebDriver().quit();
         }
@@ -114,9 +109,10 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
         
       //  System.out.println("I am in onTestStart method " +  getTestMethodName(iTestResult) + " start");
         //Start operation for extentreports.
-        ExtentTestManager.startTest(iTestResult.getMethod().getMethodName(),"");
-        String description=iTestResult.getMethod().getDescription();
-		ExtentTestManager.getTest().setDescription(description);
+    	String description=iTestResult.getMethod().getDescription();
+    	createTest(iTestResult.getMethod().getMethodName(), description);
+    	//report.setExtentTest(report.createTest(iTestResult.getMethod().getMethodName(), description));
+    	//report.setExtentTest(report.test);
     }
 
     @Override
@@ -126,8 +122,8 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
     
        // System.out.println("I am in onTestSuccess method " +  getTestMethodName(iTestResult) + " succeed");
         //Extentreports log operation for passed tests.
-        ExtentTestManager.getTest().log(LogStatus.PASS, "Test passed : "+iTestResult.getMethod().getMethodName());
-        ExtentTestManager.getTest().setEndedTime(new Date());
+    	stepPass( "Test passed : "+iTestResult.getMethod().getMethodName());
+       
         if(ConfigReader.getValue("JiraManagementTool").equalsIgnoreCase("Y")){
 			InitMethod.jiraapi.updateJiraTestResults(testName, "This is Passed", "Pass");
 		}
@@ -141,7 +137,7 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
     public void onTestFailure(ITestResult iTestResult) {
     	String testName = getTestMethodName(iTestResult);
     	//String testName = getTestMethodName(iTestResult).split("_")[1].trim();
-    	 ExtentTestManager.getTest().setEndedTime(new Date());
+    	// report.getTest().setEndedTime(new Date());
     	//String testName = scenario.getName().split("_")[0].trim();
       //  System.out.println("I am in onTestFailure method " +  getTestMethodName(iTestResult) + " failed");
 
@@ -154,17 +150,20 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
 
         //Extentreports log and screenshot operations for failed tests.
         ErrorMsg=ExceptionUtils.getFullStackTrace(iTestResult.getThrowable());
-        logStepFail(ErrorMsg);
-        String path = null;
-        try {
-			 path =takeScreenshot(getWebDriver(), getTestMethodName(iTestResult));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-        ExtentTestManager.getTest().log(LogStatus.FAIL,"Test Failed : "+iTestResult.getMethod().getMethodName(),
-                ExtentTestManager.getTest().addBase64ScreenShot(base64Screenshot));
+        //logStepFail(ErrorMsg);
+        LogUtil.infoLog(this.getClass(), "Failed :"+ErrorMsg);
         
+        
+       // report.stepFail("Test Failed : "+iTestResult.getMethod().getMethodName(), report.getExtentTest().addScreenCaptureFromBase64String(base64Screenshot));
+        stepFail("Test Failed : "+iTestResult.getMethod().getMethodName(), base64Screenshot);
         try {
+        	String path = null;
+            try {
+    			 path =takeScreenshot(getWebDriver(), getTestMethodName(iTestResult));
+    		} catch (IOException e1) {
+    			e1.printStackTrace();
+    		}
+        	
 		/*	String scFileName = "ScreenShot_"+System.currentTimeMillis();
 			String screenshotFilePath = ConfigReader.getValue("screenshotPath")+"\\"+scFileName+".png";
 		//	scenario.write("Current Page URL is " + GlobalUtil.getDriver().getCurrentUrl());
@@ -204,7 +203,8 @@ public class CustomListener extends SendMail implements ITestListener, ISuiteLis
     public void onTestSkipped(ITestResult iTestResult) {
        // System.out.println("I am in onTestSkipped method "+  getTestMethodName(iTestResult) + " skipped");
         //Extentreports log operation for skipped tests.
-        ExtentTestManager.getTest().log(LogStatus.SKIP, "Test Skipped");
+       // ExtentTestManager.getTest().log(LogStatus.SKIP, "Test Skipped");
+    	stepSkip(iTestResult.getMethod().getMethodName());
         getWebDriver().close();
     }
 
